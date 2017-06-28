@@ -134,7 +134,7 @@ namespace RoaringFangs.Animation
             if (binding_asset == null)
             {
                 throw new Exception(
-                    "Could not copy empty SpriteMeshBinding prefab asset.");
+                    "Could not copy blank SpriteMeshBinding prefab asset.");
             }
             // Update the copy's properties
             var binding = binding_asset.GetComponent<SpriteMeshBinding>();
