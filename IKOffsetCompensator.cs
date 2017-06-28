@@ -32,7 +32,8 @@ namespace RoaringFangs.Animation
     /// Sort of like an "omnidirectional holdover"
     /// </summary>
     [ExecuteInEditMode]
-    public class IKOffsetCompensator : MonoBehaviour
+    public class IKOffsetCompensator :
+        MonoBehaviour
     {
         /// <summary>
         /// The reference bone transform by which to

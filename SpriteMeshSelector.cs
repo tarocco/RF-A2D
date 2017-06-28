@@ -29,7 +29,9 @@ namespace RoaringFangs.Animation
 {
     [ExecuteInEditMode]
     [RequireComponent(typeof(SpriteMeshInstance))]
-    public class SpriteMeshSelector : MonoBehaviour, ISerializationCallbackReceiver
+    public class SpriteMeshSelector :
+        MonoBehaviour,
+        ISerializationCallbackReceiver
     {
         [SerializeField]
         private SpriteMeshInstance _SpriteMeshInstance;
