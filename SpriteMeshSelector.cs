@@ -36,6 +36,8 @@ namespace RoaringFangs.Animation
         [SerializeField]
         private SpriteMeshInstance _SpriteMeshInstance;
 
+        private SpriteMesh _PreviousSpriteMesh;
+
         [SerializeField]
         private GameObject _BindingObject;
 
@@ -45,13 +47,32 @@ namespace RoaringFangs.Animation
             set { _BindingObject = value; }
         }
 
+        private static SpriteMeshBinding GetBinding(GameObject binding_object)
+        {
+            if (binding_object == null)
+                return null;
+            return binding_object.GetComponent<SpriteMeshBinding>();
+        }
+
+        public void Start()
+        {
+            // Initial state
+            var binding = GetBinding(BindingObject);
+            if (binding != null)
+                _PreviousSpriteMesh = binding.Mesh;
+        }
+
         public void Update()
         {
-            if (_BindingObject == null)
+            var binding = GetBinding(BindingObject);
+            if (binding == null)
                 return;
-            var binding = _BindingObject.GetComponent<SpriteMeshBinding>();
-            if (binding)
-                _SpriteMeshInstance.spriteMesh = binding.Mesh;
+            var mesh = binding.Mesh;
+            if (mesh != _PreviousSpriteMesh)
+            {
+                _SpriteMeshInstance.spriteMesh = mesh;
+                _PreviousSpriteMesh = mesh;
+            }
         }
 
         public void OnBeforeSerialize()
