@@ -99,8 +99,6 @@ namespace RoaringFangs.Animation
             var game_object = new GameObject(name);
             var binding = game_object.AddComponent<SpriteMeshBinding>();
             binding.Mesh = mesh;
-            // TODO
-            //binding.Material = material;
             var path =
                 CreateManagedBindingAssetFolder() +
                 "/" + name + ".prefab";
@@ -133,8 +131,6 @@ namespace RoaringFangs.Animation
             // Update the copy's properties
             var binding = binding_asset.GetComponent<SpriteMeshBinding>();
             binding.Mesh = mesh;
-            // TODO
-            //binding.Material = material;
             return binding_asset;
         }
 
@@ -165,8 +161,6 @@ namespace RoaringFangs.Animation
                 EditorGUI.BeginChangeCheck();
 
                 var mesh = (SpriteMesh)EditorGUILayout.ObjectField("Sprite Mesh", binding.Mesh, typeof(SpriteMesh), false);
-                // TODO
-                //var material = (Material)EditorGUILayout.ObjectField("Material", binding.Material, typeof(Material), false);
 
                 bool changes = EditorGUI.EndChangeCheck();
 

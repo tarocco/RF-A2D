@@ -47,18 +47,6 @@ namespace RoaringFangs.Animation
             set { _Mesh = value; }
         }
 
-        // TODO
-        /*
-        [SerializeField]
-        private Material _Material;
-
-        public Material Material
-        {
-            get { return _Material; }
-            set { _Material = value; }
-        }
-        */
-
 #if UNITY_EDITOR
 
         private static void AssignPrefabProperty<T>(
@@ -80,78 +68,12 @@ namespace RoaringFangs.Animation
             }
         }
 
-        // TODO
-        /*
-        public static IEnumerable<T> FindAssetsByType<T>()
-            where T : UnityObject
-        {
-            var filter = string.Format("t:{0}", typeof(T));
-            var guids = AssetDatabase.FindAssets(filter);
-            foreach (var guid in guids)
-            {
-                var asset_path = AssetDatabase.GUIDToAssetPath(guid);
-                var asset = AssetDatabase.LoadAssetAtPath<T>(asset_path);
-                if (asset != null)
-                    yield return asset;
-            }
-        }
-
-        public static IEnumerable<string> FindAssetPathsByType(Type type)
-        {
-            var filter = string.Format("t:{0}", type);
-            return AssetDatabase.FindAssets(filter)
-                .Select(AssetDatabase.GUIDToAssetPath);
-        }
-
-        private static readonly Type[] DependentTypes =
-        {
-            typeof(SpriteMeshSelector)
-        };
-
-        private IEnumerable<T> GetRequiredAssets<T>(
-            IEnumerable<Type> dependent_types) where T : UnityObject
-        {
-            // Find all the dependent assets of the matching types
-            // and then get their dependencies
-            return dependent_types
-                .SelectMany(FindAssetPathsByType)
-                .SelectMany(AssetDatabase.GetDependencies)
-                .Select(AssetDatabase.LoadAssetAtPath<T>)
-                .Where(a => a != null);
-        }
-        */
-
 #endif
 
         public void OnBeforeSerialize()
         {
 #if UNITY_EDITOR
             AssignPrefabProperty(ref _Mesh, Mesh);
-
-            // TODO
-            /*
-            AssignPrefabProperty(ref _Material, Material);
-
-            var this_path = AssetDatabase.GetAssetPath(this);
-            UUID = AssetDatabase.GetAssetDependencyHash(this_path).ToString();
-
-            var required_bindings =
-                GetRequiredAssets<SpriteMeshBinding>(DependentTypes)
-                    .ToArray();
-            var all_bindings =
-                FindAssetsByType<SpriteMeshBinding>()
-                    .ToArray();
-            var orphaned_bindings =
-                all_bindings.Except(required_bindings)
-                    .ToArray();
-            var number_of_orphaned_bindings = orphaned_bindings.Count();
-            if (number_of_orphaned_bindings > 0)
-            {
-                Debug.LogWarning(
-                    "Orphaned bindings: " +
-                    number_of_orphaned_bindings);
-            }
-            */
 #endif
         }
 
