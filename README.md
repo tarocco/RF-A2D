@@ -8,5 +8,7 @@ Complete and precise frame-by-frame selection of SpriteMesh assets for animation
 ### ![Icon][IKOffsetCompensator-Icon] IKOffsetCompensator
 Adjust the holdover/under of an IK target's aim.
 
+# :tada: Documentation Coming Soon&trade;! :tada:
+
 [SpriteMeshSelector-Icon]: ../../wiki/img/SpriteMeshSelector-Icon-small.png
 [IKOffsetCompensator-Icon]: ../../wiki/img/IKOffsetCompensator-Icon-small.png
