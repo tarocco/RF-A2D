@@ -44,7 +44,8 @@ namespace RoaringFangs.Animation
 
         public static string CreateManagedBindingAssetFolder()
         {
-            var folder_path = BindingAssetPathParent + "/" + BindingAssetPathFolder;
+            const string folder_path =
+                BindingAssetPathParent + "/" + BindingAssetPathFolder;
             var folder_is_valid =
                     AssetDatabase.IsValidFolder(folder_path);
             if (!folder_is_valid)
@@ -61,7 +62,7 @@ namespace RoaringFangs.Animation
             var result = algorithm.ComputeHash(
                 System.Text.Encoding.UTF8.GetBytes(str), 0,
                 System.Text.Encoding.UTF8.GetByteCount(str));
-            foreach (byte @byte in result)
+            foreach (var @byte in result)
                 hash_builder.Append(@byte.ToString("x2"));
             var hash_string = hash_builder.ToString();
             var hash_string_lower = hash_string.ToLower();
@@ -84,7 +85,8 @@ namespace RoaringFangs.Animation
             return hash_string.Substring(0, 16);
         }
 
-        private static string GetManagedBindingName(params UnityObject[] parameters)
+        private static string GetManagedBindingName(
+            params UnityObject[] parameters)
         {
             if (parameters.Any(p => p != null))
                 return MultiHashObjectUUID(parameters);
@@ -102,8 +104,9 @@ namespace RoaringFangs.Animation
             var path =
                 CreateManagedBindingAssetFolder() +
                 "/" + name + ".prefab";
-            var binding_asset = AssetDatabase.LoadAssetAtPath<GameObject>(path) ??
-                                PrefabUtility.CreatePrefab(path, game_object);
+            var binding_asset =
+                AssetDatabase.LoadAssetAtPath<GameObject>(path) ??
+                PrefabUtility.CreatePrefab(path, game_object);
             DestroyImmediate(game_object);
             return binding_asset;
         }
@@ -114,7 +117,8 @@ namespace RoaringFangs.Animation
             var name = GetManagedBindingName(mesh);
             var folder = CreateManagedBindingAssetFolder();
             var path = folder + "/" + name + ".prefab";
-            var binding_asset = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            var binding_asset =
+                AssetDatabase.LoadAssetAtPath<GameObject>(path);
             // If the asset already exists with the same name, return it
             if (binding_asset)
                 return binding_asset;
@@ -122,12 +126,16 @@ namespace RoaringFangs.Animation
             // setting its properties
             var empty_path = folder + "/Blank.prefab";
             // Unity's documentation is useless
-            // What does the returned value of AssetDatabase.CopyAsset even mean?
+            // What does the returned value of
+            // AssetDatabase.CopyAsset even mean?
             AssetDatabase.CopyAsset(empty_path, path);
             // Try loading the copied asset
             binding_asset = AssetDatabase.LoadAssetAtPath<GameObject>(path);
             if (binding_asset == null)
-                throw new Exception("Could not copy empty SpriteMeshBinding prefab asset.");
+            {
+                throw new Exception(
+                    "Could not copy empty SpriteMeshBinding prefab asset.");
+            }
             // Update the copy's properties
             var binding = binding_asset.GetComponent<SpriteMeshBinding>();
             binding.Mesh = mesh;
@@ -136,8 +144,13 @@ namespace RoaringFangs.Animation
 
         public override void OnInspectorGUI()
         {
-            DrawPropertiesExcluding(serializedObject, "m_Script", "_BindingObject");
-            var binding_object_sp = serializedObject.FindProperty("_BindingObject");
+            DrawPropertiesExcluding(
+                serializedObject,
+                "m_Script",
+                "_BindingObject");
+
+            var binding_object_sp =
+                serializedObject.FindProperty("_BindingObject");
 
             var self = (SpriteMeshSelector)target;
             try
@@ -146,28 +159,24 @@ namespace RoaringFangs.Animation
                     binding_object_sp.objectReferenceValue as GameObject;
                 if (binding_object == null)
                 {
-                    binding_object = CreateManagedBindingAsset2(
-                        null);
+                    binding_object = CreateManagedBindingAsset2(null);
                     binding_object_sp.objectReferenceValue = binding_object;
                 }
-
                 var binding = binding_object.GetComponent<SpriteMeshBinding>();
-
                 if (binding == null)
                     throw new ArgumentException(
                         "Binding object set but is missing " +
                         "SpriteMeshSelector component.");
-
                 EditorGUI.BeginChangeCheck();
+                var mesh = (SpriteMesh)EditorGUILayout.ObjectField(
+                    "Sprite Mesh",
+                    binding.Mesh,
+                    typeof(SpriteMesh),
+                    false);
 
-                var mesh = (SpriteMesh)EditorGUILayout.ObjectField("Sprite Mesh", binding.Mesh, typeof(SpriteMesh), false);
-
-                bool changes = EditorGUI.EndChangeCheck();
-
-                if (changes)
+                if (EditorGUI.EndChangeCheck())
                 {
-                    binding_object = CreateManagedBindingAsset2(
-                        mesh);
+                    binding_object = CreateManagedBindingAsset2(mesh);
                     binding_object_sp.objectReferenceValue = binding_object;
                 }
 
