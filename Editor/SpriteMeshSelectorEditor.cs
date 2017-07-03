@@ -37,6 +37,7 @@ using UnityEditor;
 namespace RoaringFangs.Animation
 {
     [CustomEditor(typeof(SpriteMeshSelector))]
+    [CanEditMultipleObjects]
     public class SpriteMeshSelectorEditor : UnityEditor.Editor
     {
         public const string BindingAssetPathParent = "Assets";
