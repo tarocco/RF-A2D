@@ -40,6 +40,7 @@ namespace RoaringFangs.Animation
         /// orient the compensation vector
         /// </summary>
         public Transform BoneTransform;
+
         /// <summary>
         /// The IK controller transform, usually parented to
         /// this component's GameObject's transform
@@ -52,32 +53,45 @@ namespace RoaringFangs.Animation
         /// </summary>
         public Vector3 Compensation;
 
+        [Range(0f, 2f)]
+        public float DistanceScale = 1f;
+
         private void Start()
         {
-#if UNITY_EDITOR
-            if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
-                UnityEditor.EditorApplication.update += Update;
-#endif
+            //#if UNITY_EDITOR
+            //            if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+            //                UnityEditor.EditorApplication.update += LateUpdate;
+            //#endif
         }
 
         private void OnDestroy()
         {
-#if UNITY_EDITOR
-            if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
-                UnityEditor.EditorApplication.update -= Update;
-#endif
+            //#if UNITY_EDITOR
+            //            if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+            //                UnityEditor.EditorApplication.update -= LateUpdate;
+            //#endif
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             if (BoneTransform == null || IKTransform == null)
                 return;
             // Effective compensation vector calculated by transforming
             // Compensation vector by BoneTransform
-            var compensation = BoneTransform.TransformVector(Compensation);
+            //var compensation = BoneTransform.TransformVector(Compensation);
+            var goal_direction = transform.position - BoneTransform.position;
+            var fwd = transform.forward;
+            var up = Vector3.Cross(fwd, goal_direction);
+            var rotation = Quaternion.LookRotation(fwd, up);
+            var ik_position = transform.position + rotation * Compensation;
+            ik_position = Vector3.LerpUnclamped(
+                BoneTransform.position,
+                ik_position,
+                DistanceScale);
             // Set the local position of the IK transform since its
             // "handle" is its parent transform
-            IKTransform.localPosition = compensation;
+            IKTransform.position = ik_position;
+            IKTransform.localRotation = rotation;
         }
     }
 }
