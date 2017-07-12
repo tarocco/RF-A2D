@@ -91,7 +91,7 @@ namespace RoaringFangs.Animation
             // Set the local position of the IK transform since its
             // "handle" is its parent transform
             IKTransform.position = ik_position;
-            IKTransform.localRotation = rotation;
+            IKTransform.rotation = rotation;
         }
     }
 }
